@@ -32,6 +32,10 @@ class Item < ApplicationRecord
       .limit(limit)
   end
 
+  def discounts_by_item
+    self.bulk_discounts.all
+  end
+
   def convert_datetime_to_seconds(datetime)
     days_and_hours = datetime.split(":").first
     days = days_and_hours.split.first.to_i

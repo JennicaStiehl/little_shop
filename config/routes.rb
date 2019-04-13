@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
 namespace :merchants do
     resources :items, only: [:show] do
-      resources :bulk_discounts, only: [:new, :create, :edit, :update, :destroy]
+      resources :bulk_discounts, only: [:new, :create, :edit, :update, :destroy, :index, :show]
     end
   end
 

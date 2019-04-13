@@ -1,0 +1,9 @@
+<h1>Discount Show Page</h1>
+
+<div class="discount-<%=@discount.id%>">
+  Discount of $<%= @discount.discount %> when you buy <%= @discount.threshold %>.
+<% if current_merchant? %>
+<%= link_to "Edit bulk discount", edit_merchants_item_bulk_discount_path(@discount.item_id, @discount.id) %>
+ | <%= link_to "Delete bulk discount", merchants_item_bulk_discount_path(@discount.item_id, @discount.id), method: :delete %>
+<% end %>
+</div>
