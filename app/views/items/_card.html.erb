@@ -8,14 +8,26 @@
 
   <%= tag.section class: "card-body" do %>
     <%= tag.h5 class: "card-title" do %>
+    <div class="item-<%=item.id%>">
       <%= link_to item.name, item_path(item) %>
     <% end %>
 
     <p>Price: <%= number_to_currency(item.price) %></p>
     <p>Description:<br/>
       <em><%= item.description %></em>
-    </p>
-
+      <% if current_merchant? %>
+      <%= link_to "Add bulk discount", new_merchants_item_bulk_discount_path(item.id) %>
+      <% end %>
+      </p>
+    </div>
+      <% item.bulk_discounts.each do |discount| %>
+      <div id="discount-<%=discount.id%>">
+        Discount of $<%= discount.discount %> when you buy <%= discount.threshold %>.
+      <% if current_merchant? %>
+      <%= link_to "Edit bulk discount", edit_merchants_item_bulk_discount_path(item.id, discount.id) %>
+      <%= link_to "Delete bulk discount", merchants_item_bulk_discount_path(item.id, discount.id), method: :delete %>
+      <% end %></div>
+      <% end %>
     <p>
       <strong>Sold by:</strong> <%= item.user.name %><br/>
 
