@@ -2,6 +2,7 @@ class Item < ApplicationRecord
   belongs_to :user, foreign_key: 'merchant_id'
   has_many :order_items, dependent: :destroy
   has_many :orders, through: :order_items
+  has_many :bulk_discounts
 
   validates_presence_of :name, :description
 
@@ -29,6 +30,10 @@ class Item < ApplicationRecord
       .group(:id)
       .order("total_ordered #{order}")
       .limit(limit)
+  end
+
+  def discounts_by_item
+    self.bulk_discounts.all
   end
 
   def convert_datetime_to_seconds(datetime)

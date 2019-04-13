@@ -1,0 +1,8 @@
+<%= form_for [@item,@discount] do |f| %>
+<%= f.label :discount %>
+<%= f.number_field :discount %>
+<%= f.label :threshold %>
+<%= f.number_field :threshold %>
+<%= f.hidden_field :item_id, value:@item.id %>
+<%= f.submit %>
+<% end %>

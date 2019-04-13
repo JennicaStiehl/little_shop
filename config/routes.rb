@@ -19,6 +19,12 @@ Rails.application.routes.draw do
   resources :items, only: [:index, :show]
   resources :merchants, only: [:index]
 
+namespace :merchants do
+    resources :items, only: [:show] do
+      resources :bulk_discounts, only: [:new, :create, :edit, :update, :destroy, :index, :show]
+    end
+  end
+
   # User Profile Paths
   get '/profile', to: 'users#show', as: :profile
   get '/profile/edit', to: 'users#edit', as: :edit_profile

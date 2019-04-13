@@ -48,6 +48,19 @@ RSpec.describe Item, type: :model do
         expect(actual[0].total_ordered).to eq(1)
       end
     end
+
+    it '.can get all discounts asoc with one item' do
+      merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+      allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
+      item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
+      item2 = Item.create(name:'cloves', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
+      discount5 = item1.bulk_discounts.create(threshold:25, discount: 5)
+      discount10 = item1.bulk_discounts.create(threshold:50, discount: 10)
+      discount15 = item1.bulk_discounts.create(threshold:75, discount: 150)
+      item2discount5 = item2.bulk_discounts.create(threshold:25, discount: 5)
+      actual = item1.discounts_by_item.count
+      expect(actual).to eq(3)
+    end
   end
 
   describe 'instance methods' do
