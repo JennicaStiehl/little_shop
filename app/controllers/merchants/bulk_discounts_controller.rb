@@ -2,13 +2,10 @@ class Merchants::BulkDiscountsController < ApplicationController
 
   def index
     @item = Item.find(params[:item_id])
-    # @discounts = @item.discounts_by_item
   end
 
   def show
-    # binding.pry
     @discount = BulkDiscount.find(params[:id])
-    # @item = Item.find(params[:item_id])
   end
 
   def new

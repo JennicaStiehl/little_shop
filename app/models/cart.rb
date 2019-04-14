@@ -40,7 +40,22 @@ class Cart
     end
   end
 
+  def total_with_discount(discount)
+    total = items.sum do |item, quantity|
+        if discount == nil
+        (item.price * quantity)
+      else
+        (item.price * quantity) - discount.discount
+      end
+    end
+    total
+  end
+
   def subtotal(item)
     count_of(item.id) * item.price
+  end
+
+  def subtotal_with_discount(item,discount)
+    (count_of(item.id) * item.price) - discount.discount
   end
 end
