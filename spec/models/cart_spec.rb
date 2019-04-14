@@ -70,7 +70,24 @@ RSpec.describe Cart do
         expect(@cart.subtotal(@item_1)).to eq(@cart.count_of(@item_1.id) * @item_1.price)
       end
     end
+    describe "#total_with_discount(discount)" do
+      it "it can calculate the total with a discount" do
+        discount2 = @item_1.bulk_discounts.create(threshold:12, discount: 2)
+        actual = @cart.total_with_discount(discount2)
+        expect(actual).to eq(0.14e2)
+      end
+    end
+
+    describe "#subtotal_with_discount(item,discount)" do
+      it "it can calculate the subtotal with a discount" do
+        discount2 = @item_1.bulk_discounts.create(threshold:12, discount: 2)
+        actual = @cart.subtotal_with_discount(@item_1,discount2)
+        expect(actual).to eq(0.7e1)
+      end
+    end
   end
+
+
 
   describe "Cart with empty contents" do
     before :each do

@@ -33,7 +33,23 @@ class Item < ApplicationRecord
   end
 
   def discounts_by_item
-    self.bulk_discounts.all
+    self.bulk_discounts.order(threshold: :asc)
+  end
+
+  def find_discount(cart)
+    # binding.pry
+    discount = self.discounts_by_item.find do |discount|
+      discount.threshold == cart.subtotal(self)
+    end
+  end
+
+  def apply_discount(cart)
+    discount = find_discount(cart)
+    if discount == nil
+      subtotal = cart.subtotal(self)
+    else
+      subtotal = cart.subtotal_with_discount(self,discount)
+    end
   end
 
   def convert_datetime_to_seconds(datetime)
