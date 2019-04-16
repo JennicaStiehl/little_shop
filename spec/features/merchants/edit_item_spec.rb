@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Merchant editing an item" do
   before :each do
     @merchant = create(:merchant)
-    @item = create(:item, user: @merchant)
+    @item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant)
     @updated_name = "updated name"
     @updated_description = "updated description"
     @updated_price = "99.99"

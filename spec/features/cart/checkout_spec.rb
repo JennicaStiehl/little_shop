@@ -6,9 +6,9 @@ RSpec.describe "Checking out" do
   before :each do
     @merchant_1 = create(:merchant)
     @merchant_2 = create(:merchant)
-    @item_1 = create(:item, user: @merchant_1, inventory: 3)
-    @item_2 = create(:item, user: @merchant_2)
-    @item_3 = create(:item, user: @merchant_2)
+    @item_1 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant_1, inventory: 3)
+    @item_2 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant_2)
+    @item_3 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant_2)
 
     visit item_path(@item_1)
     click_on "Add to Cart"
