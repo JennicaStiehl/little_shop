@@ -6,7 +6,8 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = current_user
+    # @user = current_user
+    @user = User.find_by(slug: params[:slug])
   end
 
   def edit

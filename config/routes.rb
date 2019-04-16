@@ -60,4 +60,6 @@ namespace :merchants do
       resources :orders, only: [:show]
     end
   end
+
+  resources :users, param: :slug
 end

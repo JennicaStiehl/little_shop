@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  before_save :generate_slug
   has_secure_password
 
   enum role: [:default, :merchant, :admin]
@@ -155,4 +156,12 @@ class User < ApplicationRecord
         .order('order_count DESC')
         .limit(limit)
   end
+
+  def to_param
+      slug
+    end
+  private
+    def generate_slug
+      self.slug = name.downcase.delete(" ") if name
+    end
 end
