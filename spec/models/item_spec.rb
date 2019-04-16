@@ -58,8 +58,30 @@ RSpec.describe Item, type: :model do
       discount10 = item1.bulk_discounts.create(threshold:50, discount: 10)
       discount15 = item1.bulk_discounts.create(threshold:75, discount: 150)
       item2discount5 = item2.bulk_discounts.create(threshold:25, discount: 5)
-      actual = item1.discounts_by_item.count
+      actual = item1.all_discounts.count
       expect(actual).to eq(3)
+    end
+    it 'can find the best discount per item' do
+      merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+      item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
+      discount5 = item1.bulk_discounts.create(threshold:25, discount: 5)
+      discount10 = item1.bulk_discounts.create(threshold:50, discount: 10)
+      discount15 = item1.bulk_discounts.create(threshold:75, discount: 150)
+      actual = item1.best_discount
+      expect(actual).to eq(150)
+      actual2 = item1.avg_discount
+      expect(actual2).to eq(0.55e2)
+    end
+    it 'does not find the discount from another item while findiing the best discount' do
+      merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+      item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
+      item2 = Item.create(name:'cloves', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
+      discount5 = item1.bulk_discounts.create(threshold:25, discount: 5)
+      discount10 = item1.bulk_discounts.create(threshold:50, discount: 10)
+      discount15 = item1.bulk_discounts.create(threshold:75, discount: 150)
+      item2discount5 = item2.bulk_discounts.create(threshold:25, discount: 5)
+      actual = item1.best_discount
+      expect(actual).to_not eq(25)
     end
   end
 
@@ -101,10 +123,10 @@ RSpec.describe Item, type: :model do
         expect(unordered_item.ordered?).to be_falsy
       end
     end
-    describe "#apply_discount(cart)" do
+    describe "#apply_discount(item)" do
       it 'can find return nil when there isnt an appropriate discount' do
         discount2 = @item.bulk_discounts.create(threshold:12, discount: 2)
-        actual = @item.apply_discount(@cart_2)
+        actual = @cart_2.apply_discount(@item)
         expect(actual).to eq(0.0)
       end
     end
@@ -120,30 +142,30 @@ RSpec.describe Item, type: :model do
         discount10 = item1.bulk_discounts.create(threshold:50, discount: 10)
         discount15 = item1.bulk_discounts.create(threshold:75, discount: 150)
         item2discount5 = item2.bulk_discounts.create(threshold:25, discount: 5)
+        discount2 = item1.bulk_discounts.create(threshold:6, discount: 2)
         cart = Cart.new({"#{item1.id}" => 2, "#{item2.id}" => 2})
         discount = cart.items.each do |item, quantity|
             item = Item.find(item.id)
-            item.find_discount(cart)
+            cart.find_discount(item1)
         end
-        discount2 = item1.bulk_discounts.create(threshold:6, discount: 2)
-        actual = item1.find_discount(cart)
+        actual = cart.find_discount(item1)
         expect(actual).to eq(nil)
       end
-      xit 'can find the appropriate discount' do
-        merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
-        item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
-        item2 = Item.create(name:'cloves', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
-        discount5 = item1.bulk_discounts.create(threshold:20, discount: 5)
-        discount10 = item1.bulk_discounts.create(threshold:50, discount: 10)
-        discount15 = item1.bulk_discounts.create(threshold:75, discount: 150)
-        item2discount5 = item2.bulk_discounts.create(threshold:25, discount: 5)
+
+      it 'can find the appropriate discount' do
+        merchant = User.create!(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+        item1 = Item.create!(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
+        item2 = Item.create!(name:'cloves', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
+        discount5 = item1.bulk_discounts.create!(threshold:20, discount: 5)
+        discount10 = item1.bulk_discounts.create!(threshold:50, discount: 10)
+        discount15 = item1.bulk_discounts.create!(threshold:75, discount: 150)
+        item2discount5 = item2.bulk_discounts.create!(threshold:25, discount: 5)
         cart = Cart.new({"#{item1.id}" => 12, "#{item2.id}" => 2})
-        discount = cart.items.each do |item, quantity|
-            item = Item.find(item.id)
-            item.find_discount(cart)
-        end
-        actual = item1.find_discount(cart)
-        expect(actual).to eq(discount)
+
+        actual = cart.find_discount(item1)
+        
+        expect(actual.discount).to eq(discount5.discount)
+        expect(actual.threshold).to eq(discount5.threshold)
       end
     end
   end
