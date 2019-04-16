@@ -48,7 +48,7 @@ namespace :merchants do
 
     patch '/merchants/:id/downgrade', to: 'merchants#downgrade', as: :downgrade_merchant
     patch '/users/:id/upgrade', to: 'users#upgrade', as: :upgrade_user
-    resources :users, only: [:index, :show]
+    resources :users, only: [:index, :show], param: :slug
 
     resources :orders, only: [:show]
     patch '/orders/:order_id/ship', to: 'orders#ship', as: 'order_ship'
@@ -61,5 +61,5 @@ namespace :merchants do
     end
   end
 
-  resources :users, param: :slug
+  # resources :users, param: :slug
 end
