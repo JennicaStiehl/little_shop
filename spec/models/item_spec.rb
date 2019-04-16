@@ -151,7 +151,7 @@ RSpec.describe Item, type: :model do
         actual = cart.find_discount(item1)
         expect(actual).to eq(nil)
       end
-      
+
       it 'can find the appropriate discount' do
         merchant = User.create!(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
         item1 = Item.create!(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
@@ -163,7 +163,7 @@ RSpec.describe Item, type: :model do
         cart = Cart.new({"#{item1.id}" => 12, "#{item2.id}" => 2})
 
         actual = cart.find_discount(item1)
-        # binding.pry
+        
         expect(actual.discount).to eq(discount5.discount)
         expect(actual.threshold).to eq(discount5.threshold)
       end
