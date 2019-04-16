@@ -22,7 +22,7 @@ RSpec.describe User, type: :model do
 
   describe 'roles' do
     it 'can be created as a default user' do
-      user = User.create(
+      user = User.create(slug: :email,
         email: "email",
         password: "password",
         name: "name",
@@ -36,7 +36,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'can be created as a merchant' do
-      user = User.create(
+      user = User.create(slug: :email,
         email: "email",
         password: "password",
         name: "name",
@@ -51,7 +51,7 @@ RSpec.describe User, type: :model do
     end
 
     it 'can be created as an admin' do
-      user = User.create(
+      user = User.create(slug: :email,
         email: "email",
         password: "password",
         name: "name",
@@ -76,18 +76,18 @@ RSpec.describe User, type: :model do
       u6 = create(:user, state: "IA", city: "Des Moines")
 
       @m1 = create(:merchant)
-      @i1 = create(:item, merchant_id: @m1.id, inventory: 20)
-      @i2 = create(:item, merchant_id: @m1.id, inventory: 20)
-      @i3 = create(:item, merchant_id: @m1.id, inventory: 20)
-      @i4 = create(:item, merchant_id: @m1.id, inventory: 20)
-      @i5 = create(:item, merchant_id: @m1.id, inventory: 20)
-      @i6 = create(:item, merchant_id: @m1.id, inventory: 20)
-      @i7 = create(:item, merchant_id: @m1.id, inventory: 20)
-      @i8 = create(:item, merchant_id: @m1.id, inventory: 20)
+      @i1 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
+      @i2 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
+      @i3 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
+      @i4 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
+      @i5 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
+      @i6 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
+      @i7 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
+      @i8 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id, inventory: 20)
       @i9 = create(:inactive_item, merchant_id: @m1.id)
 
       @m2 = create(:merchant)
-      @i10 = create(:item, merchant_id: @m2.id, inventory: 20)
+      @i10 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m2.id, inventory: 20)
 
       o1 = create(:shipped_order, user: @u1)
       o2 = create(:shipped_order, user: @u2)
@@ -183,9 +183,9 @@ RSpec.describe User, type: :model do
       expect(@m1.top_user_by_item_count.quantity).to eq(10)
     end
 
-    it “.generate_slug” do
-      user = create(:user, name: “joe”)
-      expect(user.slug).to eq(joe)
+    it '.generate_slug' do
+      user = create(:user, name: 'joe', email: "joe@joe.com")
+      expect(user.slug).to include('joe@joe.com')
     end
   end
 
@@ -214,13 +214,13 @@ RSpec.describe User, type: :model do
         u5 = create(:user, state: "IA", city: "Des Moines")
         u6 = create(:user, state: "IA", city: "Des Moines")
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
-        i1 = create(:item, merchant_id: @m1.id)
-        i2 = create(:item, merchant_id: @m2.id)
-        i3 = create(:item, merchant_id: @m3.id)
-        i4 = create(:item, merchant_id: @m4.id)
-        i5 = create(:item, merchant_id: @m5.id)
-        i6 = create(:item, merchant_id: @m6.id)
-        i7 = create(:item, merchant_id: @m7.id)
+        i1 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id)
+        i2 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m2.id)
+        i3 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m3.id)
+        i4 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m4.id)
+        i5 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m5.id)
+        i6 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m6.id)
+        i7 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m7.id)
         o1 = create(:shipped_order, user: u1)
         o2 = create(:shipped_order, user: u2)
         o3 = create(:shipped_order, user: u3)

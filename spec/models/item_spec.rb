@@ -50,7 +50,7 @@ RSpec.describe Item, type: :model do
     end
 
     it '.can get all discounts asoc with one item' do
-      merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+      merchant = User.create(slug: :email, role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(merchant)
       item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
       item2 = Item.create(name:'cloves', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
@@ -62,7 +62,7 @@ RSpec.describe Item, type: :model do
       expect(actual).to eq(3)
     end
     it 'can find the best discount per item' do
-      merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+      merchant = User.create(slug: :email, role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
       item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
       discount5 = item1.bulk_discounts.create(threshold:25, discount: 5)
       discount10 = item1.bulk_discounts.create(threshold:50, discount: 10)
@@ -73,7 +73,7 @@ RSpec.describe Item, type: :model do
       expect(actual2).to eq(0.55e2)
     end
     it 'does not find the discount from another item while findiing the best discount' do
-      merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+      merchant = User.create(slug: :email, role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
       item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
       item2 = Item.create(name:'cloves', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
       discount5 = item1.bulk_discounts.create(threshold:25, discount: 5)
@@ -88,7 +88,7 @@ RSpec.describe Item, type: :model do
   describe 'instance methods' do
     before :each do
       @merchant = create(:merchant)
-      @user = User.create(email:"dsf@sad", password:"sdf", role:0, active:true, name:"sid",address:"asd", city:"asd", state:"as",zip:47589)
+      @user = User.create(slug: :email, email:"dsf@sad", password:"sdf", role:0, active:true, name:"sid",address:"asd", city:"asd", state:"as",zip:47589)
       @item = @merchant.items.create(price:3,inventory:30, name:"widget", active:true, image:"sdf.jpeg", description:"real stuff")
       @order = Order.create(user_id:@user, status:0)
       @order_item_1 = create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 12.hours.ago)
@@ -106,7 +106,7 @@ RSpec.describe Item, type: :model do
       end
 
       it "returns nil when there are no order_items" do
-        unfulfilled_item = create(:item, user: @merchant)
+        unfulfilled_item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant)
         unfulfilled_order_item = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
 
         expect(unfulfilled_item.average_fulfillment_time).to be_falsy
@@ -135,7 +135,7 @@ RSpec.describe Item, type: :model do
 
     describe "#find_discount" do
       it 'can find return nil when there isnt an appropriate discount' do
-        merchant = User.create(role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
+        merchant = User.create(slug: :email, role:1, email: 'm3@gmail.com', active: true, name:"June's Produce", created_at: 10.days.ago, updated_at: 1.days.ago, city:"Denver", state:"CO", zip: 80209, address:"123 the road", password:"pw")
         item1 = Item.create(name:'cinnamon', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
         item2 = Item.create(name:'cloves', active:true, price:2.5, description:"fresh", inventory: 20, merchant_id: merchant.id, image: "https://www.continuumcolo.org/wp-content/uploads/2016/03/Image-Coming-Soon-Placeholder-300x300.png")
         discount5 = item1.bulk_discounts.create(threshold:20, discount: 5)
@@ -163,10 +163,14 @@ RSpec.describe Item, type: :model do
         cart = Cart.new({"#{item1.id}" => 12, "#{item2.id}" => 2})
 
         actual = cart.find_discount(item1)
-        
+
         expect(actual.discount).to eq(discount5.discount)
         expect(actual.threshold).to eq(discount5.threshold)
       end
+    end
+    it '.generate_slug' do
+      item = create(:item, name: 'joe')
+      expect(item.slug).to include('joe')
     end
   end
 end

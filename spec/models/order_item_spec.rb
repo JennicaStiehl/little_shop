@@ -22,7 +22,7 @@ RSpec.describe OrderItem, type: :model do
     end
 
     it '.fulfill' do
-      item = create(:item, inventory:2)
+      item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  inventory:2)
       oi1 = create(:order_item, quantity: 1, item: item)
       oi2 = create(:order_item, quantity: 1, item: item)
       oi3 = create(:order_item, quantity: 1, item: item)
@@ -49,7 +49,7 @@ RSpec.describe OrderItem, type: :model do
     end
 
     it 'inventory_available' do
-      item = create(:item, inventory:2)
+      item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  inventory:2)
       oi1 = create(:order_item, quantity: 1, item: item)
       oi2 = create(:order_item, quantity: 2, item: item)
       oi3 = create(:order_item, quantity: 3, item: item)
