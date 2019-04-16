@@ -1,10 +1,18 @@
 class Merchants::BulkDiscountsController < ApplicationController
 
   def index
-    @item = Item.find(params[:item_id])
+    @item = Item.find_by(slug: params[:item_id])
   end
 
   def show
+    if params[:item_id].length > 4
+      @item = Item.find_by(slug: params[:item_id])
+    elsif params[:item_id] == nil
+      Item.find_nil_slugs
+      @item = Item.find_by(slug: params[:item_id])
+    else
+      @item = Item.find(params[:item_id])
+    end
     @discount = BulkDiscount.find(params[:id])
   end
 
@@ -25,7 +33,11 @@ class Merchants::BulkDiscountsController < ApplicationController
 
   def edit
     @discount = BulkDiscount.find(params[:id])
-    @item = Item.find(params[:item_id])
+    if params[:slug]
+      @item = Item.find_by(slug: params[:slug])
+    else
+      @item = Item.find(params[:item_id])
+    end
   end
 
   def update
