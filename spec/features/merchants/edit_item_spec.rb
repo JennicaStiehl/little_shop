@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "Merchant editing an item" do
   before :each do
-    @merchant = create(:merchant)
-    @item = create(:item, user: @merchant)
+    @merchant = create(:merchant, slug:nil)
+    @item = create(:item, name: 'widget', slug: nil,  user: @merchant)
     @updated_name = "updated name"
     @updated_description = "updated description"
     @updated_price = "99.99"

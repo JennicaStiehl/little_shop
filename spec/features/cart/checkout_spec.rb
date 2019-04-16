@@ -4,11 +4,11 @@ include ActionView::Helpers::NumberHelper
 
 RSpec.describe "Checking out" do
   before :each do
-    @merchant_1 = create(:merchant)
-    @merchant_2 = create(:merchant)
-    @item_1 = create(:item, user: @merchant_1, inventory: 3)
-    @item_2 = create(:item, user: @merchant_2)
-    @item_3 = create(:item, user: @merchant_2)
+    @merchant_1 = create(:merchant, slug:nil)
+    @merchant_2 = create(:merchant, slug:nil)
+    @item_1 = create(:item, name: 'widget', slug: nil,  user: @merchant_1, inventory: 3)
+    @item_2 = create(:item, name: 'widget', slug: nil,  user: @merchant_2)
+    @item_3 = create(:item, name: 'widget', slug: nil,  user: @merchant_2)
 
     visit item_path(@item_1)
     click_on "Add to Cart"
@@ -22,7 +22,7 @@ RSpec.describe "Checking out" do
 
   context "as a logged in regular user" do
     before :each do
-      user = create(:user)
+      user = create(:user, slug: nil)
       login_as(user)
       visit cart_path
 

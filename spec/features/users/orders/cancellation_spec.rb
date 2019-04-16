@@ -2,16 +2,16 @@ require 'rails_helper'
 
 RSpec.describe 'User Order workflow', type: :feature do
   before :each do
-    @user = create(:user)
-    @admin = create(:admin)
+    @user = create(:user, slug: nil)
+    @admin = create(:admin, slug:nil)
 
-    @merchant_1 = create(:merchant)
-    @merchant_2 = create(:merchant)
+    @merchant_1 = create(:merchant, slug:nil)
+    @merchant_2 = create(:merchant, slug:nil)
 
     @inventory_level = 20
     @purchased_amount = 5
-    @item_1 = create(:item, user: @merchant_1)
-    @item_2 = create(:item, user: @merchant_2, inventory: @inventory_level)
+    @item_1 = create(:item, user: @merchant_1) #name: 'widget', slug: "widget-2",
+    @item_2 = create(:item, user: @merchant_2, inventory: @inventory_level) #name: 'widget', slug: "widget-3",
 
     @order_1 = create(:order, user: @user, created_at: 1.day.ago)
     @oi_1 = create(:order_item, order: @order_1, item: @item_1, price: 1, quantity: 1, created_at: 1.day.ago)
@@ -26,12 +26,13 @@ RSpec.describe 'User Order workflow', type: :feature do
     @oi_2 = create(:fulfilled_order_item, order: @order_3, item: @item_2, price: 2, quantity: 1, created_at: 1.day.ago, updated_at: 2.hours.ago)
 
     visit item_path(@item_2)
+
     expect(page).to have_content("In stock: #{@inventory_level}")
   end
 
   describe 'as a user trying to cancel someone elses order' do
     it 'should not be successful' do
-      @user2 = create(:user)
+      @user2 = create(:user, slug: nil)
       login_as(@user2)
       page.driver.submit :delete, "/profile/orders/#{@order_1.id}", {}
       expect(page.status_code).to eq(404)
@@ -52,11 +53,7 @@ RSpec.describe 'User Order workflow', type: :feature do
       expect(page).to_not have_button('Cancel Order')
 
       @am_user = true
-    end
 
-    # do same but as an admin
-
-    after :each do
       visit profile_order_path(@order_1)
       click_button('Cancel Order')
 
@@ -74,8 +71,10 @@ RSpec.describe 'User Order workflow', type: :feature do
         end
       end
 
-      visit item_path(@item_2)
+      @item_2.reload
+      visit item_path(@item_2.slug)
       expect(page).to have_content("In stock: #{@inventory_level + @purchased_amount}")
+
 
       # cancel order 2
       visit profile_order_path(@order_2)
@@ -95,6 +94,7 @@ RSpec.describe 'User Order workflow', type: :feature do
         end
       end
 
+      @item_2.reload
       visit item_path(@item_2)
       expect(page).to have_content("In stock: #{@inventory_level + @purchased_amount + @purchased_amount}")
     end

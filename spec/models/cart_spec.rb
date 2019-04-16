@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe Cart do
   describe "Cart with existing contents" do
     before :each do
-      @item_1 = create(:item, id: 1)
-      @item_4 = create(:item, id: 4)
+      @item_1 = create(:item, name: 'widget', slug: nil,  id: 1)
+      @item_4 = create(:item, name: 'widget', slug: nil,  id: 4)
       @cart = Cart.new({"1" => 3, "4" => 2})
     end
 

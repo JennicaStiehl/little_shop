@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'user profile', type: :feature do
   before :each do
-    @user = create(:user)
+    @user = create(:user, slug: nil)
   end
 
   describe 'registered user visits their profile' do
@@ -120,7 +120,7 @@ RSpec.describe 'user profile', type: :feature do
     end
 
     it 'fails with non-unique email address change' do
-      create(:user, email: 'megan@example.com')
+      create(:user, slug: nil, email: 'megan@example.com')
       login_as(@user)
 
       visit edit_profile_path

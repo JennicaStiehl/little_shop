@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'merchant dashboard' do
   before :each do
-    @merchant = create(:merchant)
-    @admin = create(:admin)
+    @merchant = create(:merchant, slug:nil)
+    @admin = create(:admin, slug:nil)
     @i1, @i2 = create_list(:item, 2, user: @merchant)
     @o1, @o2 = create_list(:order, 2)
     @o3 = create(:shipped_order)

@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  before_save :generate_slug
   has_secure_password
 
   enum role: [:default, :merchant, :admin]
@@ -20,7 +21,7 @@ class User < ApplicationRecord
   def top_items_sold_by_quantity(limit)
     items.joins(order_items: :order)
          .where(order_items: {fulfilled: true}, orders: {status: :shipped})
-         .select('items.id, items.name, sum(order_items.quantity) as quantity')
+         .select('items.id, items.name, items.slug, sum(order_items.quantity) as quantity')
          .group(:id)
          .order('quantity DESC, id')
          .limit(limit)
@@ -155,4 +156,25 @@ class User < ApplicationRecord
         .order('order_count DESC')
         .limit(limit)
   end
+
+  def to_param
+      slug
+    end
+
+  def split_email
+    new_email = self.email.split('.')
+    new_email[0]
+  end
+
+  def self.find_nil_slugs
+    empties = self.where('slug is null')
+    empties.each do |item|
+      item.update!(slug:"#{self.split_email}-#{SecureRandom.uuid}")
+    end
+  end
+
+  private
+    def generate_slug
+      self.slug = split_email.downcase  if email #+ SecureRandom.uuid
+    end
 end

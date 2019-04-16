@@ -6,10 +6,12 @@ RSpec.describe 'Site Nav', type: :feature do
     @user_2 = create(:user)
     @merchant = create(:merchant)
     @admin = create(:admin)
-
-    item_1 = create(:item, user: @merchant)
+    # User.find_nil_slugs
+    item_1 = create(:item, name: 'widget',  user: @merchant)
     order = create(:shipped_order, user: @user)
     create(:fulfilled_order_item, order: order, item: item_1, price: 1, quantity: 1, created_at: 2.days.ago, updated_at: 1.minutes.ago)
+    # User.find_nil_slugs
+    # Item.find_nil_slugs
   end
 
   it 'should show proper links for all visitors' do
@@ -87,7 +89,7 @@ RSpec.describe 'Site Nav', type: :feature do
 
   it 'should show proper links for all merchants logged in' do
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@merchant)
-
+ 
     visit root_path
 
     click_link 'Dashboard'

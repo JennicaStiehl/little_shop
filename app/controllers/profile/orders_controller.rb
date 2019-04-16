@@ -35,7 +35,7 @@ class Profile::OrdersController < ApplicationController
     cart.items.each do |item, quantity|
       discount = cart.find_discount(item)
       if discount
-        subtotal = item * quantity - discount
+        subtotal = item.price * quantity - discount.discount
         discounted_item_price = subtotal / quantity
         order.order_items.create(item: item, quantity: quantity, price: discounted_item_price)
       else

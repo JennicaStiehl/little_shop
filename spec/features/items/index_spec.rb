@@ -5,7 +5,7 @@ RSpec.describe 'items index workflow', type: :feature do
   describe 'shows all active items to visitors' do
     it 'displays basic item data' do
       items = create_list(:item, 3)
-      out_of_stock = create(:item, inventory: 0)
+      out_of_stock = create(:item, name: 'widget', slug: nil,  inventory: 0)
       inactive_items = create_list(:inactive_item, 2)
 
       visit items_path

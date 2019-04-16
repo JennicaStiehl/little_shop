@@ -2,16 +2,16 @@ require 'rails_helper'
 
 RSpec.describe "Cart show page" do
   before :each do
-    @merchant_1 = create(:merchant)
-    @merchant_2 = create(:merchant)
-    @item_1 = create(:item, user: @merchant_1, inventory: 3)
-    @item_2 = create(:item, user: @merchant_2)
-    @item_3 = create(:item, user: @merchant_2)
+    @merchant_1 = create(:merchant, slug:nil)
+    @merchant_2 = create(:merchant, slug:nil)
+    @item_1 = create(:item, name: 'widget', slug: nil,  user: @merchant_1, inventory: 3)
+    @item_2 = create(:item, name: 'widget', slug: nil,  user: @merchant_2)
+    @item_3 = create(:item, name: 'widget', slug: nil,  user: @merchant_2)
   end
 
   context "a regular user or visitor sees their cart summary" do
     scenario "as a regular user" do
-      user = create(:user)
+      user = create(:user, slug: nil)
       login_as(user)
     end
 
@@ -65,7 +65,7 @@ RSpec.describe "Cart show page" do
 
   context "a regular user or visitor sees an empty cart message" do
     scenario "as a regular user" do
-      user = create(:user)
+      user = create(:user, slug: nil)
       login_as(user)
     end
 
@@ -82,7 +82,7 @@ RSpec.describe "Cart show page" do
 
   context "a regular user or visitor can empty their cart" do
     scenario "as a regular user" do
-      user = create(:user)
+      user = create(:user, slug: nil)
       login_as(user)
     end
 
@@ -110,7 +110,7 @@ RSpec.describe "Cart show page" do
 
   context "a regular user or visitor can remove an item from the cart" do
     scenario "as a regular user" do
-      user = create(:user)
+      user = create(:user, slug: nil)
       login_as(user)
     end
 
@@ -139,7 +139,7 @@ RSpec.describe "Cart show page" do
 
   context "a regular user or visitor can increment item quantities" do
     scenario "as a regular user" do
-      user = create(:user)
+      user = create(:user, slug: nil)
       login_as(user)
     end
 
@@ -167,7 +167,7 @@ RSpec.describe "Cart show page" do
 
   context "a regular user or visitor can decrement item quantities" do
     scenario "as a regular user" do
-      user = create(:user)
+      user = create(:user, slug: nil)
       login_as(user)
     end
 

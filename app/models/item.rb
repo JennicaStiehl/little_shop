@@ -1,4 +1,6 @@
 class Item < ApplicationRecord
+  before_save :generate_slug
+
   belongs_to :user, foreign_key: 'merchant_id'
   has_many :order_items, dependent: :destroy
   has_many :orders, through: :order_items
@@ -61,4 +63,24 @@ class Item < ApplicationRecord
   def ordered?
     order_items.count > 0
   end
-end
+
+  def to_param
+    # if self.slug
+      slug
+      # else
+      #   Item.find_nil_slugs
+      # end
+    end
+
+    def self.find_nil_slugs
+      empties = self.where('slug is null')
+      empties.each do |item|
+        item.update!(slug:"#{item.name}-#{item.id}")
+      end
+    end
+
+  private
+    def generate_slug
+      self.slug = "#{name.downcase.delete(" ")}-#{SecureRandom.uuid}"
+    end
+  end

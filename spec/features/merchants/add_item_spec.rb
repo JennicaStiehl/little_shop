@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Merchant adding an item" do
   before :each do
-    @merchant = create(:merchant)
+    @merchant = create(:merchant, slug:nil)
     login_as(@merchant)
     visit dashboard_items_path
     click_link "Add new Item"

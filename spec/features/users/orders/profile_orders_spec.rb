@@ -4,14 +4,14 @@ include ActionView::Helpers::NumberHelper
 
 RSpec.describe 'Profile Orders page', type: :feature do
   before :each do
-    @user = create(:user)
-    @admin = create(:admin)
+    @user = create(:user, slug: nil)
+    @admin = create(:admin, slug:nil)
 
-    @merchant_1 = create(:merchant)
-    @merchant_2 = create(:merchant)
+    @merchant_1 = create(:merchant, slug:nil)
+    @merchant_2 = create(:merchant, slug:nil)
 
-    @item_1 = create(:item, user: @merchant_1)
-    @item_2 = create(:item, user: @merchant_2)
+    @item_1 = create(:item, name: 'widget', slug: nil,  user: @merchant_1)
+    @item_2 = create(:item, name: 'widget', slug: nil,  user: @merchant_2)
   end
 
   context 'as a registered user' do

@@ -7,23 +7,24 @@ include FactoryBot::Syntax::Methods
 Item.destroy_all
 User.destroy_all
 
-admin = create(:admin)
-user = create(:user)
-merchant_1 = create(:merchant)
+admin = create(:admin, slug:nil)
+user = create(:user, slug: nil)
+merchant_1 = create(:merchant, slug:nil)
 
 merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)
 
 inactive_merchant_1 = create(:inactive_merchant)
 inactive_user_1 = create(:inactive_user)
 
-item_1 = create(:item, user: merchant_1)
-item_2 = create(:item, user: merchant_2)
-item_3 = create(:item, user: merchant_3)
-item_4 = create(:item, user: merchant_4)
+item_1 = create(:item, name: 'widget', user: merchant_1)
+item_2 = create(:item, name: 'widget', user: merchant_2)
+item_3 = create(:item, name: 'widget', user: merchant_3)
+item_4 = create(:item, name: 'widget', user: merchant_4)
 create_list(:item, 10, user: merchant_1)
 
 inactive_item_1 = create(:inactive_item, user: merchant_1)
 inactive_item_2 = create(:inactive_item, user: inactive_merchant_1)
+Item.find_nil_slugs
 
 # Random.new_seed
 # rng = Random.new

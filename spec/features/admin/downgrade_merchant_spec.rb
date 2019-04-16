@@ -4,8 +4,8 @@ RSpec.describe 'Downgrade Merchant to User' do
   describe 'As an admin' do
     describe 'from the admin merchant dashboard (show)' do
       it 'can click button to downgrade a merchant' do
-        admin = create(:admin)
-        merchant = create(:merchant)
+        admin = create(:admin, slug:nil)
+        merchant = create(:merchant, slug:nil)
 
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(admin)
 

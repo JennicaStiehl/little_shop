@@ -20,23 +20,27 @@ class Dashboard::ItemsController < Dashboard::BaseController
   end
 
   def edit
-    @item = Item.find(params[:id])
+    @item = Item.find_by(slug: params[:slug])
   end
 
   def update
-    @item = Item.find(params[:id])
+    if item_params[:slug]
+      @item = Item.find_by(slug: item_params[:slug])
+    else
+      @item = Item.find_by(slug: params[:slug])
+    end
     if @item.update(item_params)
       flash[:success] = "Your Item has been updated!"
       redirect_to dashboard_items_path
     else
       flash[:danger] = @item.errors.full_messages
-      @item = Item.find(params[:id])
+      @item = Item.find_by(slug: params[:slug])
       render :edit
     end
   end
 
   def enable
-    @item = Item.find(params[:id])
+    @item = Item.find_by(slug: params[:slug])
     if @item.user == current_user
       toggle_active(@item, true)
       redirect_to dashboard_items_path
@@ -46,7 +50,7 @@ class Dashboard::ItemsController < Dashboard::BaseController
   end
 
   def disable
-    @item = Item.find(params[:id])
+    @item = Item.find_by(slug: params[:slug])
     if @item.user == current_user
       toggle_active(@item, false)
       redirect_to dashboard_items_path
@@ -56,7 +60,7 @@ class Dashboard::ItemsController < Dashboard::BaseController
   end
 
   def destroy
-    @item = Item.find(params[:id])
+    @item = Item.find_by(slug: params[:slug])
     if @item && @item.user == current_user
       if @item && @item.ordered?
         flash[:error] = "Attempt to delete #{@item.name} was thwarted!"
@@ -72,7 +76,7 @@ class Dashboard::ItemsController < Dashboard::BaseController
   private
 
   def item_params
-    item_parameters = params.require(:item).permit(:name, :price, :description, :image, :inventory)
+    item_parameters = params.require(:item).permit(:name, :price, :description, :image, :inventory, :slug)
     if item_parameters[:image].empty?
       item_parameters[:image] = "https://picsum.photos/200/300"
     end
