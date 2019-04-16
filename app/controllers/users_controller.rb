@@ -6,9 +6,8 @@ class UsersController < ApplicationController
   end
 
   def show
-    # @user = current_user
-    binding.pry
-    @user = User.find_by(slug: params[:slug])
+    @user = current_user
+    # @user = User.find_by(slug: params[:slug])
   end
 
   def edit

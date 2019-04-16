@@ -43,7 +43,7 @@ RSpec.describe 'the registration page' do
     end
 
     it "should display an error when an email is taken" do
-      user = create(:user)
+      user = create(:user, slug: nil)
       user.update(email: "example@gmail.com")
 
       visit registration_path

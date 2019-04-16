@@ -12,7 +12,7 @@ RSpec.describe "merchant index workflow", type: :feature do
         @am_admin = false
       end
       scenario 'as an admin' do
-        admin = create(:admin)
+        admin = create(:admin, slug:nil)
         allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(admin)
         @am_admin = true
       end
@@ -50,8 +50,8 @@ RSpec.describe "merchant index workflow", type: :feature do
 
     describe 'admins can enable/disable merchants' do
       before :each do
-        @merchant_1 = create(:merchant)
-        @admin = create(:admin)
+        @merchant_1 = create(:merchant, slug:nil)
+        @admin = create(:admin, slug:nil)
       end
       it 'allows an admin to disable a merchant' do
         login_as(@admin)
@@ -92,20 +92,20 @@ RSpec.describe "merchant index workflow", type: :feature do
 
     describe "shows merchant statistics" do
       before :each do
-        u1 = create(:user, state: "CO", city: "Fairfield")
-        u3 = create(:user, state: "IA", city: "Fairfield")
-        u2 = create(:user, state: "OK", city: "OKC")
-        u4 = create(:user, state: "IA", city: "Des Moines")
-        u5 = create(:user, state: "IA", city: "Des Moines")
-        u6 = create(:user, state: "IA", city: "Des Moines")
+        u1 = create(:user, slug: nil, state: "CO", city: "Fairfield")
+        u3 = create(:user, slug: nil, state: "IA", city: "Fairfield")
+        u2 = create(:user, slug: nil, state: "OK", city: "OKC")
+        u4 = create(:user, slug: nil, state: "IA", city: "Des Moines")
+        u5 = create(:user, slug: nil, state: "IA", city: "Des Moines")
+        u6 = create(:user, slug: nil, state: "IA", city: "Des Moines")
         @m1, @m2, @m3, @m4, @m5, @m6, @m7 = create_list(:merchant, 7)
-        i1 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m1.id)
-        i2 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m2.id)
-        i3 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m3.id)
-        i4 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m4.id)
-        i5 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m5.id)
-        i6 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m6.id)
-        i7 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  merchant_id: @m7.id)
+        i1 = create(:item, name: 'widget', slug: nil,  merchant_id: @m1.id)
+        i2 = create(:item, name: 'widget', slug: nil,  merchant_id: @m2.id)
+        i3 = create(:item, name: 'widget', slug: nil,  merchant_id: @m3.id)
+        i4 = create(:item, name: 'widget', slug: nil,  merchant_id: @m4.id)
+        i5 = create(:item, name: 'widget', slug: nil,  merchant_id: @m5.id)
+        i6 = create(:item, name: 'widget', slug: nil,  merchant_id: @m6.id)
+        i7 = create(:item, name: 'widget', slug: nil,  merchant_id: @m7.id)
         @o1 = create(:shipped_order, user: u1)
         @o2 = create(:shipped_order, user: u2)
         @o3 = create(:shipped_order, user: u3)

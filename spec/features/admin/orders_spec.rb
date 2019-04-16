@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Admin Order workflow', type: :feature do
   before :each do
-    @admin = create(:admin)
+    @admin = create(:admin, slug:nil)
     allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(@admin)
 
     user_1, user_2, user_3, user_4 = create_list(:user, 4)

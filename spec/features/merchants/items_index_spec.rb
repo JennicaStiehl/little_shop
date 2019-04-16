@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Merchant index page" do
   before :each do
-    @merchant = create(:merchant)
+    @merchant = create(:merchant, slug:nil)
     @item_1, @item_2 = create_list(:item, 2, user: @merchant)
     @item_3 = create(:inactive_item, user: @merchant)
     @order_1, @order_2 = create_list(:order, 2)

@@ -7,9 +7,9 @@ include FactoryBot::Syntax::Methods
 Item.destroy_all
 User.destroy_all
 
-admin = create(:admin)
-user = create(:user)
-merchant_1 = create(:merchant)
+admin = create(:admin, slug:nil)
+user = create(:user, slug: nil)
+merchant_1 = create(:merchant, slug:nil)
 
 merchant_2, merchant_3, merchant_4 = create_list(:merchant, 3)
 

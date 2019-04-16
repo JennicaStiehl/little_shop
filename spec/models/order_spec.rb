@@ -13,7 +13,7 @@ RSpec.describe Order, type: :model do
 
   describe 'instance methods' do
     before :each do
-      user = create(:user)
+      user = create(:user, slug: nil)
       @item_1 = create(:item)
       @item_2 = create(:item)
       yesterday = 1.day.ago
@@ -22,7 +22,7 @@ RSpec.describe Order, type: :model do
       @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 1, created_at: yesterday, updated_at: yesterday)
       @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 1, created_at: yesterday, updated_at: 2.hours.ago)
 
-      @merchant = create(:merchant)
+      @merchant = create(:merchant, slug:nil)
       @i1, @i2 = create_list(:item, 2, user: @merchant)
       @o1, @o2 = create_list(:order, 2)
       @o3 = create(:packaged_order)
@@ -47,8 +47,8 @@ RSpec.describe Order, type: :model do
 
   describe 'class methods' do
     before :each do
-      user = create(:user)
-      @merchant = create(:merchant)
+      user = create(:user, slug: nil)
+      @merchant = create(:merchant, slug:nil)
       @i1, @i2 = create_list(:item, 2, user: @merchant)
 
       @o1, @o2, @o3, @o4, @o5 = create_list(:shipped_order, 5, user: user)
@@ -106,7 +106,7 @@ RSpec.describe Order, type: :model do
 
   describe 'instance methods' do
     before :each do
-      user = create(:user)
+      user = create(:user, slug: nil)
       @item_1 = create(:item)
       @item_2 = create(:item)
       yesterday = 1.day.ago
@@ -115,7 +115,7 @@ RSpec.describe Order, type: :model do
       @oi_1 = create(:order_item, order: @order, item: @item_1, price: 1, quantity: 1, created_at: yesterday, updated_at: yesterday)
       @oi_2 = create(:fulfilled_order_item, order: @order, item: @item_2, price: 2, quantity: 1, created_at: yesterday, updated_at: 2.hours.ago)
 
-      @merchant = create(:merchant)
+      @merchant = create(:merchant, slug:nil)
       @i1, @i2 = create_list(:item, 2, user: @merchant)
       @o1, @o2 = create_list(:order, 2)
       @o3 = create(:shipped_order)
@@ -142,13 +142,13 @@ RSpec.describe Order, type: :model do
     end
 
     it '.order_items_for_merchant' do
-      merchant1 = create(:merchant)
-      merchant2 = create(:merchant)
-      user = create(:user)
+      merchant1 = create(:merchant, slug:nil)
+      merchant2 = create(:merchant, slug:nil)
+      user = create(:user, slug: nil)
       order = create(:order, user: user)
-      item1 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: merchant1)
-      item2 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: merchant2)
-      item3 = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: merchant1)
+      item1 = create(:item, name: 'widget', slug: nil,  user: merchant1)
+      item2 = create(:item, name: 'widget', slug: nil,  user: merchant2)
+      item3 = create(:item, name: 'widget', slug: nil,  user: merchant1)
       oi1 = create(:order_item, order: order, item: item1, quantity: 1, price: 2)
       oi2 = create(:order_item, order: order, item: item2, quantity: 2, price: 3)
       oi3 = create(:order_item, order: order, item: item3, quantity: 3, price: 4)

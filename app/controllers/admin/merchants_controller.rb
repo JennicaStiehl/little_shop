@@ -1,6 +1,6 @@
 class Admin::MerchantsController < Admin::BaseController
   def show
-    @merchant = User.find(params[:id])
+    @merchant = User.find_by(slug: params[:slug])
     if @merchant.role == "merchant"
       render :'/dashboard/dashboard/index'
     else

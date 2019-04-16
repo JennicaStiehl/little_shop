@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe 'Admin User Show' do
   describe 'as an admin' do
     it 'sees the same info a user sees, without option to edit' do
-      user = create(:user)
-      admin = create(:admin)
+      user = create(:user, slug: nil)
+      admin = create(:admin, slug:nil)
 
       allow_any_instance_of(ApplicationController).to receive(:current_user).and_return(admin)
 

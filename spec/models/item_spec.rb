@@ -18,9 +18,9 @@ RSpec.describe Item, type: :model do
   describe 'class methods' do
     describe 'item popularity' do
       before :each do
-        merchant = create(:merchant)
+        merchant = create(:merchant, slug:nil)
         @items = create_list(:item, 6, user: merchant)
-        user = create(:user)
+        user = create(:user, slug: nil)
 
         order = create(:shipped_order, user: user)
         create(:fulfilled_order_item, order: order, item: @items[3], quantity: 7)
@@ -87,7 +87,7 @@ RSpec.describe Item, type: :model do
 
   describe 'instance methods' do
     before :each do
-      @merchant = create(:merchant)
+      @merchant = create(:merchant, slug:nil)
       @user = User.create(slug: :email, email:"dsf@sad", password:"sdf", role:0, active:true, name:"sid",address:"asd", city:"asd", state:"as",zip:47589)
       @item = @merchant.items.create(price:3,inventory:30, name:"widget", active:true, image:"sdf.jpeg", description:"real stuff")
       @order = Order.create(user_id:@user, status:0)
@@ -106,7 +106,7 @@ RSpec.describe Item, type: :model do
       end
 
       it "returns nil when there are no order_items" do
-        unfulfilled_item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant)
+        unfulfilled_item = create(:item, name: 'widget', slug: nil,  user: @merchant)
         unfulfilled_order_item = create(:order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
 
         expect(unfulfilled_item.average_fulfillment_time).to be_falsy

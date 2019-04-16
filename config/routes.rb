@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   resources :merchants, only: [:index], param: :slug
 
 namespace :merchants do
-    resources :items, only: [:show] do
+    resources :items, only: [:show, :index], param: :slug do
       resources :bulk_discounts
     end
   end
@@ -55,9 +55,9 @@ namespace :merchants do
 
     patch '/merchants/:id/enable', to: 'merchants#enable', as: :enable_merchant
     patch '/merchants/:id/disable', to: 'merchants#disable', as: :disable_merchant
-    resources :merchants, only: [:show] do
+    resources :merchants, only: [:show], param: :slug do
       resources :items, only: [:new]
-      resources :items, only: [:index], param: :slug
+      resources :items, only: [:index]
       resources :orders, only: [:show]
     end
   end

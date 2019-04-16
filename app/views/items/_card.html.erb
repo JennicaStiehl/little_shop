@@ -1,5 +1,6 @@
 <%= tag.div class: "card float-left m-3 item-card #{style_class}" do %>
-  <%= tag.a href: item_path(item) do %>
+
+  <%= tag.a href: item_path(item.slug) do %>
     <%= image_tag item.image,
       alt: "image for #{item.name}",
       class: "card-img-top",

@@ -4,7 +4,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def show
-    @user = User.find(params[:id])
+    @user = User.find_by(slug: params[:slug])
     if @user.role == "merchant"
       redirect_to admin_merchant_path(@user)
     end

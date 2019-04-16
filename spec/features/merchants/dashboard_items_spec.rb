@@ -4,19 +4,19 @@ include ActionView::Helpers::NumberHelper
 
 RSpec.describe 'Merchant Dashboard Items page' do
   before :each do
-    @merchant = create(:merchant)
-    @admin = create(:admin)
+    @merchant = create(:merchant, slug:nil)
+    @admin = create(:admin, slug:nil)
 
-    @items = create_list(:item, 3, user: @merchant)
-    @items << create(:inactive_item, user: @merchant)
-
+    @items = create_list(:item, 3, user: @merchant, slug:' ')
+    @items << create(:inactive_item, user: @merchant, slug: ' ')
+Item.find_nil_slugs
     @order = create(:shipped_order)
     @oi_1 = create(:fulfilled_order_item, order: @order, item: @items[0], price: 1, quantity: 1, created_at: 2.hours.ago, updated_at: 50.minutes.ago)
   end
 
   describe 'allows me to disable then re-enable an active item' do
     before :each do
-      @item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant, name: 'Widget', description: 'Something witty goes here', price: 1.23, inventory: 456)
+      @item = create(:item, name: 'widget', slug: nil,  user: @merchant, name: 'Widget', description: 'Something witty goes here', price: 1.23, inventory: 456)
     end
 
     scenario 'when logged in as merchant' do
@@ -46,6 +46,7 @@ RSpec.describe 'Merchant Dashboard Items page' do
     describe 'works when nobody has purchased that item before' do
       scenario 'when logged in as merchant' do
         login_as(@merchant)
+
         visit dashboard_items_path
 
         within "#item-#{@items[1].id}" do
@@ -78,7 +79,7 @@ RSpec.describe 'Merchant Dashboard Items page' do
 
   describe 'other merchants from modifying my items' do
     before :each do
-      @bad_merchant = create(:merchant)
+      @bad_merchant = create(:merchant, slug:nil)
       login_as(@bad_merchant)
     end
 

@@ -6,9 +6,9 @@ include ActionView::Helpers::NumberHelper
 
 RSpec.describe 'items index stats', type: :feature do
   it 'should show the top and bottom items by quantity popularity' do
-    merchant = create(:merchant)
+    merchant = create(:merchant, slug:nil)
     items = create_list(:item, 7, user: merchant)
-    user = create(:user)
+    user = create(:user, slug: nil)
 
     order = create(:shipped_order, user: user)
     create(:fulfilled_order_item, order: order, item: items[3], quantity: 7) # Name 4

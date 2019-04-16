@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe "item show page" do
   before :each do
-    @merchant = create(:merchant)
-    @item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: @merchant)
+    @merchant = create(:merchant, slug:nil)
+    @item = create(:item, name: 'widget', slug: nil,  user: @merchant)
     @order_item_1 = create(:fulfilled_order_item, item: @item, created_at: 4.days.ago, updated_at: 12.hours.ago)
     @order_item_2 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
     @order_item_3 = create(:fulfilled_order_item, item: @item, created_at: 2.days.ago, updated_at: 1.day.ago)
@@ -35,8 +35,8 @@ RSpec.describe "item show page" do
   end
 
   it "displays no average fulfillment time if there are no order items" do
-    merchant = create(:merchant)
-    item = create(:item, name: 'widget', slug: "widget-#{rand(10_000..99_999)}",  user: merchant)
+    merchant = create(:merchant, slug:nil)
+    item = create(:item, name: 'widget', slug: nil,  user: merchant)
     order_item_4 = create(:order_item, item: item, created_at: 2.days.ago, updated_at: 1.day.ago)
     visit item_path(item)
 
