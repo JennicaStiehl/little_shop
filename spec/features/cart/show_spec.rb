@@ -39,7 +39,7 @@ RSpec.describe "Cart show page" do
         expect(page).to have_xpath("//img[@src='#{@item_1.image}']")
         expect(page).to have_content(@item_1.user.name)
         expect(page).to have_content(@item_1.price)
-        expect(page).to have_content("quantity: 1")
+        expect(page).to have_content("Quantity: 1")
         expect(page).to have_content("subtotal: $#{@item_1.price}")
       end
 
@@ -48,7 +48,7 @@ RSpec.describe "Cart show page" do
         expect(page).to have_xpath("//img[@src='#{@item_2.image}']")
         expect(page).to have_content(@item_2.user.name)
         expect(page).to have_content(@item_2.price)
-        expect(page).to have_content("quantity: 1")
+        expect(page).to have_content("Quantity: 1")
         expect(page).to have_content("subtotal: $#{@item_2.price}")
       end
 
@@ -57,7 +57,7 @@ RSpec.describe "Cart show page" do
         expect(page).to have_xpath("//img[@src='#{@item_3.image}']")
         expect(page).to have_content(@item_3.user.name)
         expect(page).to have_content(@item_3.price)
-        expect(page).to have_content("quantity: 2")
+        expect(page).to have_content("Quantity: 2")
         expect(page).to have_content("subtotal: $#{@item_3.price * 2}")
       end
     end
@@ -152,16 +152,16 @@ RSpec.describe "Cart show page" do
 
       visit cart_path
 
-      expect(page).to have_content("quantity: 1")
+      expect(page).to have_content("Quantity: 1")
       click_button("+")
       expect(page).to have_content("#{@item_1.name} has been added to your cart!")
-      expect(page).to have_content("quantity: 2")
+      expect(page).to have_content("Quantity: 2")
       click_button("+")
       expect(page).to have_content("#{@item_1.name} has been added to your cart!")
-      expect(page).to have_content("quantity: 3")
+      expect(page).to have_content("Quantity: 3")
       click_button("+")
       expect(page).to have_content("The Merchant does not have enough inventory.")
-      expect(page).to have_content("quantity: 3")
+      expect(page).to have_content("Quantity: 3")
     end
   end
 
@@ -182,10 +182,10 @@ RSpec.describe "Cart show page" do
 
       visit cart_path
 
-      expect(page).to have_content("quantity: 2")
+      expect(page).to have_content("Quantity: 2")
       click_button("-")
       expect(page).to have_content("#{@item_3.name} has been removed from your cart.")
-      expect(page).to have_content("quantity: 1")
+      expect(page).to have_content("Quantity: 1")
       click_button("-")
 
       expect(page).to_not have_css("#item-#{@item_3.id}")

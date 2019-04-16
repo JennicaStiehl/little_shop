@@ -34,6 +34,39 @@ class Cart
     end.to_h
   end
 
+  def find_item(item)
+    if item.class == Integer
+      item = Item.find(item)
+    elsif item.class == OrderItem
+      item = Item.find(item.item_id)
+    else
+      item
+    end
+  end
+
+  def find_discount(item_object)
+    item = find_item(item_object)
+    discount = item.all_discounts.find do |discount|
+       self.subtotal(item) >=  discount.threshold
+    end
+  end
+
+  def apply_discount(item)
+    discount = find_discount(item)
+    if discount == nil
+      subtotal = self.subtotal(item)
+    else
+      subtotal = self.subtotal_with_discount(item,discount)
+    end
+  end
+
+  def discounted_price_per_item(oitem)
+    # item = find_item(oitem)
+    if oitem
+      apply_discount(item) / oitem.quantity
+    end
+  end
+
   def total
     items.sum do |item, quantity|
       item.price * quantity

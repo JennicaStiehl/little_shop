@@ -15,6 +15,20 @@ class OrderItem < ApplicationRecord
     quantity * price
   end
 
+  # def find_discount(order_item)
+  #   if order_item
+  #     subtotal = order_item.price * order_item.quantity
+  #     item = Item.find_by(id: item_id)
+  #     discount = item.discounts_by_item.find do |discount|
+  #       discount.threshold == subtotal
+  #       new_subtotal = subtotal - discount.discount
+  #     end
+  #   end
+  # end
+
+
+  
+
   def fulfill
     if item.inventory >= quantity && !self.fulfilled
       item.inventory -= quantity

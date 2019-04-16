@@ -1,3 +1,6 @@
+<% cart.items.each do |item, quantity| %>
+    <% @discount = item.find_discount(cart) %>
+<% end %>
 <%= tag.div id: "order-#{@order.id}" do %>
   <p>Customer Name: <%= @user.name %></p>
   <p>Customer Address:</p>
@@ -5,7 +8,6 @@
   <p><%= @user.city %>, <%= @user.state %> <%= @user.zip %></p>
 
   <p>Order Status: <%= @order.status %></p>
-
   <% @order_items.each do |oitem| %>
     <div class="card float-left m-3 order-item-card" id="oitem-<%= oitem.id %>">
       <div class="card-body">
@@ -14,9 +16,12 @@
         <p><%= oitem.item.description %></p>
         <img id="item-<%= oitem.item.id %>-image" alt="image for <%= oitem.item.name %>" src="<%= oitem.item.image %>" width=150 />
         <p>Merchant: <%= oitem.item.user.name %></p>
+        
         <p>Price: <%= number_to_currency(oitem.price) %></p>
         <p>Quantity: <%= oitem.quantity %></p>
+
         <p>Subtotal: <%= number_to_currency(oitem.subtotal) %></p>
+
         <p>Fulfilled: <%= oitem.fulfilled ? 'Yes' : 'No' %></p>
         <% if !oitem.fulfilled && oitem.inventory_available %>
           <%= button_to 'Fulfill', dashboard_fulfill_order_item_path(oitem), method: :put %>
