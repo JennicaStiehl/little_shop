@@ -1,11 +1,11 @@
 class Merchants::BulkDiscountsController < ApplicationController
 
   def index
-    @item = Item.find_by(slug: params[:item_id])
+    @item = Item.find_by(slug: params[:item_slug])
   end
 
   def show
-    if params[:item_id].length > 4
+    if params[:item_id]
       @item = Item.find_by(slug: params[:item_id])
     elsif params[:item_id] == nil
       Item.find_nil_slugs
@@ -18,7 +18,7 @@ class Merchants::BulkDiscountsController < ApplicationController
 
   def new
     @discount = BulkDiscount.new
-    @item = Item.find(params[:item_id])
+    @item = Item.find(params[:item_slug])
   end
 
   def create
@@ -36,7 +36,7 @@ class Merchants::BulkDiscountsController < ApplicationController
     if params[:slug]
       @item = Item.find_by(slug: params[:slug])
     else
-      @item = Item.find(params[:item_id])
+      @item = Item.find(params[:item_slug])
     end
   end
 

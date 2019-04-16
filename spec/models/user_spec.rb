@@ -185,7 +185,7 @@ RSpec.describe User, type: :model do
 
     it '.generate_slug' do
       user = create(:user, slug: nil, name: 'joe', email: "joe@joe.com")
-      expect(user.slug).to include('joe@joe.com')
+      expect(user.slug).to include('joe@joe')
     end
   end
 

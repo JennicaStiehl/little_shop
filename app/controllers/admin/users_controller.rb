@@ -11,7 +11,7 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def upgrade
-    user = User.find(params[:id])
+    user = User.find_by(slug: params[:id])
     user.update(role: :merchant)
     flash[:success] = "#{user.name} is now a merchant."
     redirect_to admin_merchant_path(user)
